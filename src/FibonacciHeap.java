@@ -5,7 +5,13 @@
  */
 public class FibonacciHeap
 {
-
+	private HeapNode minNode; // min pointer
+	private static int totalCuts; 
+	private static int totalLinks;
+	private int treeNum; 
+	private int markedNum; // for potential
+	private int size; 
+	
    /**
     * public boolean empty()
     *
@@ -17,7 +23,7 @@ public class FibonacciHeap
     */
     public boolean empty()
     {
-    	return false; // should be replaced by student code
+    	return minNode == null;
     }
 		
    /**
@@ -50,7 +56,7 @@ public class FibonacciHeap
     */
     public HeapNode findMin()
     {
-    	return new HeapNode(0);// should be replaced by student code
+    	return minNode; 
     } 
     
    /**
@@ -72,7 +78,7 @@ public class FibonacciHeap
     */
     public int size()
     {
-    	return 0; // should be replaced by student code
+    	return size;
     }
     	
     /**
@@ -83,8 +89,7 @@ public class FibonacciHeap
     */
     public int[] countersRep()
     {
-	int[] arr = new int[42];
-        return arr; //	 to be replaced by student code
+    	return null;
     }
 	
    /**
@@ -118,7 +123,7 @@ public class FibonacciHeap
     */
     public int potential() 
     {    
-    	return 0; // should be replaced by student code
+    	return treeNum+(2*markedNum);
     }
 
    /**
@@ -131,7 +136,7 @@ public class FibonacciHeap
     */
     public static int totalLinks()
     {    
-    	return 0; // should be replaced by student code
+    	return totalLinks;
     }
 
    /**
@@ -142,7 +147,7 @@ public class FibonacciHeap
     */
     public static int totalCuts()
     {    
-    	return 0; // should be replaced by student code
+    	return totalCuts;
     }
     
    /**
@@ -156,12 +161,21 @@ public class FibonacciHeap
     public class HeapNode{
 
 	public int key;
+	private int rank;
+	private boolean marked;
+	private HeapNode child;
+	private HeapNode next;
+	private HeapNode prev;
+	private HeapNode parent;
 
-  	public HeapNode(int key) {
-	    this.key = key;
-      }
 
-  	public int getKey() {
+	public HeapNode(int key) {
+		this.key = key;
+		marked = false;
+		rank = 0;
+	}
+
+	public int getKey() {
 	    return this.key;
       }
 
