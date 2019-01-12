@@ -146,7 +146,7 @@ public class FibonacciHeap {
     	return countersRep; 
     }
     
-    private int maxRank() {
+    private int maxRank() {        
     	int maxRank = 0; 
     	HeapNode temp = minNode; 
     	do {
@@ -194,6 +194,8 @@ public class FibonacciHeap {
     } */
     
     private void cut(HeapNode x, HeapNode y) {
+    	totalCuts++; 
+    	treeNum++; // Every cut adds a new tree
     	x.parent = null; 
     	x.marked = false; 
     	--y.rank; 
