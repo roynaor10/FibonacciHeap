@@ -87,7 +87,7 @@ public class FibonacciHeap {
     *
     */
 
-    public void meld (FibonacciHeap heap2)
+    public void meld(FibonacciHeap heap2)
     {
     	
     	size += heap2.size;
@@ -155,9 +155,53 @@ public class FibonacciHeap {
     * The function decreases the key of the node x by delta. The structure of the heap should be updated
     * to reflect this change (for example, the cascading cuts procedure should be applied if needed).
     */
-    public void decreaseKey(HeapNode x, int delta) {    
-    	return; // should be replaced by student code
+    public void decreaseKey(HeapNode x, int delta) { 
+    	if ((x == null) || (delta < 0) || (x.key - delta < 0)) return;
+    	x.key -= delta; 
+    	if (x == minNode) return; 
+    	if ((x.parent != null) && (x.rank < x.parent.key)) {
+    		cascadingCut(x, x.parent); 
+    	}
+    	findNewMin(); 
     }
+    
+	private void findNewMin() {
+    	HeapNode temp = minNode.next; 
+    	while (temp != minNode) {
+    		if (temp.key < minNode.key) {
+    			minNode = temp;
+    			return; 
+    		}
+    		temp = temp.next; 
+    	}
+    }
+    
+    private void cut(HeapNode x, HeapNode y) {
+    	x.parent = null; 
+    	x.marked = false; 
+    	--y.rank; 
+    	if (x.next == x) {
+    		y.child = null; 
+    	}
+    	else {
+    		y.child = x.next; 
+    		x.prev.next = x.next; 
+    		x.next.prev = x.prev; 
+    	}
+    }
+    
+    private void cascadingCut(HeapNode x, HeapNode y) {
+    	cut(x, y); 
+    	if (y.parent != null) {
+    		if (!y.marked) { // y.marked == false - y has yet lost one of its sons 
+    			y.marked = true; // mark y as having lost one of its sons 
+    		}
+    		else {
+    			cascadingCut(y, y.parent); 
+    		}
+    	}
+    }
+    
 
    /**
     * public int potential() 
@@ -206,7 +250,7 @@ public class FibonacciHeap {
 	private int rank;
 	private boolean marked;
 	private HeapNode child;
-	private HeapNode next;
+	private HeapNode next; 
 	private HeapNode prev;
 	private HeapNode parent;
 
@@ -219,7 +263,5 @@ public class FibonacciHeap {
 	public int getKey() {
 		return this.key;
 	}
-	
-	
     } 
 }
