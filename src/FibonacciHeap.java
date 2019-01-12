@@ -29,7 +29,10 @@ public class FibonacciHeap {
     *
     * Creates a node (of type HeapNode) which contains the given key, and inserts it into the heap. 
     */
-    public HeapNode insert(int key) { 
+
+    public HeapNode insert(int key)
+    {    
+
     	HeapNode newNode = new HeapNode(key); 
     	// Default values: rank = 0, mark = False, child = null
     	// next = null, prev = null, parent = null
@@ -76,8 +79,37 @@ public class FibonacciHeap {
     * Meld the heap with heap2
     *
     */
-    public void meld (FibonacciHeap heap2) {
-    	  return; // should be replaced by student code   		
+
+    public void meld (FibonacciHeap heap2)
+    {
+    	
+    	size += heap2.size;
+    	treeNum += heap2.treeNum;
+    	markedNum += heap2.markedNum; //update fields
+    	
+    	
+    	if (heap2.minNode == null) return; //nothing to meld if heap empty
+    	else if (minNode == null) {
+    		minNode=heap2.minNode;
+    		return; //if this heap empty, it now looks the same as heap2 did initially
+    	}
+    	
+    	
+    	//if heap not empty these pointers exist
+    	HeapNode othermin = heap2.findMin();
+    	HeapNode currentListSecond = findMin().next;
+    	HeapNode otherListEnd = othermin.prev; //since the array is circular we determine first is min and his prev is last
+    	
+    	minNode.next = othermin;
+    	othermin.prev = minNode;
+    	
+    	otherListEnd.next = currentListSecond;
+    	currentListSecond.prev = otherListEnd; //put heap 2 inbetween min and min.next
+    	
+    	
+    	if(heap2.minNode.key<minNode.key) minNode = heap2.minNode; //update min
+    	
+
     }
 
    /**
