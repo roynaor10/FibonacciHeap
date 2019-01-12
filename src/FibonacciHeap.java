@@ -3,8 +3,7 @@
  *
  * An implementation of fibonacci heap over non-negative integers.
  */
-public class FibonacciHeap
-{
+public class FibonacciHeap {
 	private HeapNode minNode; // min pointer
 	private static int totalCuts; 
 	private static int totalLinks;
@@ -21,8 +20,7 @@ public class FibonacciHeap
     * is empty.
     *   
     */
-    public boolean empty()
-    {
+    public boolean empty() {
     	return minNode == null;
     }
 		
@@ -31,9 +29,25 @@ public class FibonacciHeap
     *
     * Creates a node (of type HeapNode) which contains the given key, and inserts it into the heap. 
     */
-    public HeapNode insert(int key)
-    {    
-    	return new HeapNode(key); // should be replaced by student code
+    public HeapNode insert(int key) { 
+    	HeapNode newNode = new HeapNode(key); 
+    	// Default values: rank = 0, mark = False, child = null
+    	// next = null, prev = null, parent = null
+    	if (empty()) {
+    		minNode = newNode; 
+    		minNode.next = minNode; 
+    		minNode.prev = minNode; 
+    	}
+    	else { 
+    		newNode.next = minNode.next;
+    		minNode.next.prev = newNode; 
+    		newNode.prev = minNode;  
+    		minNode.next = newNode; 
+    	}
+    	if (newNode.key < minNode.key) {
+    		minNode = newNode; 
+    	}
+    	return newNode; 
     }
 
    /**
@@ -42,10 +56,8 @@ public class FibonacciHeap
     * Delete the node containing the minimum key.
     *
     */
-    public void deleteMin()
-    {
+    public void deleteMin() {
      	return; // should be replaced by student code
-     	
     }
 
    /**
@@ -54,8 +66,7 @@ public class FibonacciHeap
     * Return the node of the heap whose key is minimal. 
     *
     */
-    public HeapNode findMin()
-    {
+    public HeapNode findMin() {
     	return minNode; 
     } 
     
@@ -65,8 +76,7 @@ public class FibonacciHeap
     * Meld the heap with heap2
     *
     */
-    public void meld (FibonacciHeap heap2)
-    {
+    public void meld (FibonacciHeap heap2) {
     	  return; // should be replaced by student code   		
     }
 
@@ -76,8 +86,7 @@ public class FibonacciHeap
     * Return the number of elements in the heap
     *   
     */
-    public int size()
-    {
+    public int size() {
     	return size;
     }
     	
@@ -87,8 +96,7 @@ public class FibonacciHeap
     * Return a counters array, where the value of the i-th entry is the number of trees of order i in the heap. 
     * 
     */
-    public int[] countersRep()
-    {
+    public int[] countersRep() {
     	return null;
     }
 	
@@ -98,8 +106,7 @@ public class FibonacciHeap
     * Deletes the node x from the heap. 
     *
     */
-    public void delete(HeapNode x) 
-    {    
+    public void delete(HeapNode x) {    
     	return; // should be replaced by student code
     }
 
@@ -109,8 +116,7 @@ public class FibonacciHeap
     * The function decreases the key of the node x by delta. The structure of the heap should be updated
     * to reflect this change (for example, the cascading cuts procedure should be applied if needed).
     */
-    public void decreaseKey(HeapNode x, int delta)
-    {    
+    public void decreaseKey(HeapNode x, int delta) {    
     	return; // should be replaced by student code
     }
 
@@ -121,9 +127,8 @@ public class FibonacciHeap
     * Potential = #trees + 2*#marked
     * The potential equals to the number of trees in the heap plus twice the number of marked nodes in the heap. 
     */
-    public int potential() 
-    {    
-    	return treeNum+(2*markedNum);
+    public int potential() {    
+    	return treeNum + (2 * markedNum);
     }
 
    /**
@@ -134,8 +139,7 @@ public class FibonacciHeap
     * rank bigger by one, by hanging the tree which has larger value in its root on the tree which has smaller value 
     * in its root.
     */
-    public static int totalLinks()
-    {    
+    public static int totalLinks() {    
     	return totalLinks;
     }
 
@@ -145,8 +149,7 @@ public class FibonacciHeap
     * This static function returns the total number of cut operations made during the run-time of the program.
     * A cut operation is the operation which diconnects a subtree from its parent (during decreaseKey/delete methods). 
     */
-    public static int totalCuts()
-    {    
+    public static int totalCuts() {    
     	return totalCuts;
     }
     
@@ -158,7 +161,7 @@ public class FibonacciHeap
     * another file 
     *  
     */
-    public class HeapNode{
+    public class HeapNode {
 
 	public int key;
 	private int rank;
@@ -168,7 +171,6 @@ public class FibonacciHeap
 	private HeapNode prev;
 	private HeapNode parent;
 
-
 	public HeapNode(int key) {
 		this.key = key;
 		marked = false;
@@ -176,8 +178,9 @@ public class FibonacciHeap
 	}
 
 	public int getKey() {
-	    return this.key;
-      }
-
-    }
+		return this.key;
+	}
+	
+	
+    } 
 }
