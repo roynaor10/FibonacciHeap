@@ -32,24 +32,31 @@ public class FibonacciHeap {
 
     public HeapNode insert(int key)
     {    
+    	
+    	if (key < 0) return null;
 
     	HeapNode newNode = new HeapNode(key); 
     	// Default values: rank = 0, mark = False, child = null
     	// next = null, prev = null, parent = null
-    	if (empty()) {
+    	
+    	if (empty()) { //insert first node
     		minNode = newNode; 
     		minNode.next = minNode; 
     		minNode.prev = minNode; 
     	}
-    	else { 
+    	
+    	else {  //insert between minnode and minnode.next
     		newNode.next = minNode.next;
     		minNode.next.prev = newNode; 
     		newNode.prev = minNode;  
     		minNode.next = newNode; 
     	}
-    	if (newNode.key < minNode.key) {
-    		minNode = newNode; 
-    	}
+    	
+    	if (newNode.key < minNode.key) minNode = newNode; //update min
+    	
+    	size++;
+    	treeNum++; //update fields
+    	
     	return newNode; 
     }
 
@@ -96,8 +103,8 @@ public class FibonacciHeap {
     	
     	
     	//if heap not empty these pointers exist
-    	HeapNode othermin = heap2.findMin();
-    	HeapNode currentListSecond = findMin().next;
+    	HeapNode othermin = heap2.minNode;
+    	HeapNode currentListSecond = minNode.next;
     	HeapNode otherListEnd = othermin.prev; //since the array is circular we determine first is min and his prev is last
     	
     	minNode.next = othermin;
