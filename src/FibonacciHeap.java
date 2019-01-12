@@ -195,26 +195,29 @@ public class FibonacciHeap {
     	
     	HeapNode temp = node;
     	HeapNode nexttemp;
-    	HeapNode currentLinkedTree = null;
+    	HeapNode currentLinkedTree;
     	int insertplace;
     	
     	while (temp != null) {
 
+    		currentLinkedTree = temp;
     		nexttemp = temp.next;
     		temp.next = null; //disconnected from list completely
     		//we go through all this trouble of disconnecting pointers to avoid unwanted pointer in trees after link
     		insertplace = temp.rank;
     		
 
-    		if (rankArray[insertplace] == null) rankArray[insertplace] = temp;  //"insert into vases" , no more links
+    		if (rankArray[insertplace] == null) {
+    			rankArray[insertplace] = temp;  //"insert into vases" , no more links
+    			System.out.println("inserted "+temp.key);
+    		}
     		
     		else {
     			while (rankArray[insertplace] != null) { //keep linking trees until no more pairs to link
-					currentLinkedTree = link(rankArray[insertplace], temp); //"link and move to next vase"
+					currentLinkedTree = link(rankArray[insertplace], currentLinkedTree); //"link and move to next vase"
 	    			rankArray[insertplace] = null; //"empty vase"
 	    			insertplace++;
 				}
-    			
     			//we linked until we found a free vase
     			rankArray[insertplace] = currentLinkedTree;
 
