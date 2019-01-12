@@ -89,6 +89,7 @@ public class FibonacciHeap {
     	minNode.next = null;
     	minNode.prev = null; //delete min node from tree list (bypass it)
     	
+    	
     	if (minNode.child == null) { //skip concating and successive link immediately
     		successiveLink(minNext);
 			return;
@@ -141,6 +142,9 @@ public class FibonacciHeap {
      */
     private HeapNode link(HeapNode x,HeapNode y) {
     	
+    	treeNum--;
+    	totalLinks++;
+    	
     	if (x.key > y.key) { //if x not smaller than y switch
     		HeapNode temp =  x;
     		x = y;
@@ -166,6 +170,7 @@ public class FibonacciHeap {
     	
     	x.rank++; //added one child
     	
+    	System.out.println("linked " +x.key+ " to "+y.key); //TODO delete
     	return x; //return new root
     	
     }
@@ -189,21 +194,29 @@ public class FibonacciHeap {
     	
     	HeapNode temp = node;
     	HeapNode nexttemp;
-    	int tempRank;
+    	HeapNode currentLinkedTree = null;
+    	int insertplace;
     	
-    	while (temp.next != null) {
+    	while (temp != null) {
 
     		nexttemp = temp.next;
     		temp.next = null; //disconnected from list completely
     		//we go through all this trouble of disconnecting pointers to avoid unwanted pointer in trees after link
-    		tempRank = temp.rank;
+    		insertplace = temp.rank;
     		
 
-    		if (rankArray[tempRank] == null) rankArray[tempRank] = temp;  //"insert into vases"
+    		if (rankArray[insertplace] == null) rankArray[insertplace] = temp;  //"insert into vases" , no more links
     		
     		else {
-    			rankArray[tempRank + 1] = link(rankArray[tempRank], temp); //"link and move to next vase"
-    			rankArray[tempRank] = null; //"empty vase"
+    			while (rankArray[insertplace] != null) { //keep linking trees until no more pairs to link
+					currentLinkedTree = link(rankArray[insertplace], temp); //"link and move to next vase"
+	    			rankArray[insertplace] = null; //"empty vase"
+	    			insertplace++;
+				}
+    			
+    			//we linked until we found a free vase
+    			rankArray[insertplace] = currentLinkedTree;
+
     		}
     		
     		temp = nexttemp;
