@@ -60,6 +60,12 @@ public class FibonacciHeap {
     	return newNode; 
     }
 
+    public String linetostring(HeapNode node) {
+    	String string = node.key+" ";
+    	for (HeapNode temp=node.next; temp!=node; temp=temp.next) string+= temp.key+" ";
+    	return string;
+	}
+    
    /**
     * public void deleteMin()
     *
@@ -67,9 +73,168 @@ public class FibonacciHeap {
     *
     */
     public void deleteMin() {
-     	return; // should be replaced by student code
+    	
+    	if (minNode == null) return;
+    	
+    	size--;
+    	if(size == 0) { //if heap now empty
+    		minNode = null;
+    		return;
+    	}
+    	
+    	HeapNode minNext = minNode.next;  //pointer to other node in list for concating later
+    	
+    	minNode.prev.next = minNode.next;
+    	minNode.next.prev = minNode.prev;
+    	minNode.next = null;
+    	minNode.prev = null; //delete min node from tree list (bypass it)
+    	
+    	if (minNode.child == null) { //skip concating and successive link immediately
+    		successiveLink(minNext);
+			return;
+		}
+    	
+    	HeapNode directChild = minNode.child;
+    	minNode.child = null; //cut child pointer;
+    	
+    	directChild.parent = null;
+    	HeapNode temp = directChild.next;
+    	while (temp != directChild) { //we go over every node in children (until we return to beginning- circular array)
+			temp.parent = null; //delete parent pointers;
+			treeNum++; //added trees = children - 1
+			temp = temp.next;
+		}
+    	//note: num of children = rank = O(logn)
+    	
+    	//all min node pointers deleted
+    	
+    	//we can now treat directChild as the start of a different heap and meld
+    	
+    	if(minNext == minNode) { //list to meld into is empty
+    		minNode = directChild; //temporary
+    	}
+    	
+    	else {
+    		minNode = minNext; //temporary
+    		
+        	HeapNode currentListSecond = minNode.next;
+        	HeapNode otherListEnd = directChild.prev; //since the array is circular we determine first is min and his prev is last
+        	
+        	minNode.next = directChild;
+        	directChild.prev = minNode;
+        	
+        	otherListEnd.next = currentListSecond;
+        	currentListSecond.prev = otherListEnd; //put "new heap" inbetween min and min.next
+		}
+    	
+    	//we now do successive linking to find new min
+    	
+    	successiveLink(minNode);
+    	
+    	
     }
+    
+    /**
+     * links two trees x,y such that y is now x.child (y is hanged on x's root).
+     * returns the new linked tree.
+     * updates rank of new root.
+     */
+    private HeapNode link(HeapNode x,HeapNode y) {
+    	
+    	if (x.key > y.key) { //if x not smaller than y switch
+    		HeapNode temp =  x;
+    		x = y;
+    		y = temp;
+    	}
+    	//now x smaller - will be new root
+    	
+    	if(x.child == null) { //y only child, create own list
+    		y.next = y;
+    		y.prev = y;
+    	}
+    	
+    	else { //insert y in son list between child and child.next
+			y.next = x.child.next;
+			y.prev = x.child;
+			
+			x.child.next.prev = y;
+			x.child.next = y;
+		}
+    	
+    	x.child = y;
+    	y.parent = x; //update parent child pointers
+    	
+    	x.rank++; //added one child
+    	
+    	return x; //return new root
+    	
+    }
+    
+    /**
+     * receives a heap and performs successive linking on it (adds tree by ranks as shown in class)
+     * @param node pointer to heap (some root)
+     * @return node pointer to new linked heap (new root)- root returned is new min node
+     */
+    private void successiveLink(HeapNode node) {
+		
+    	int maxRank = (int)(5*Math.log10(size)) + 2; //max rank <= 1.44log2(n) <= 5log10(n) (according to lecture)
+    	HeapNode[] rankArray = new HeapNode[maxRank];
+    	
+    	node.prev.next = null; 
+    	node.prev = null; //now list not circular
+    	for (HeapNode temp = node.next; temp != null; temp = temp.next) temp.prev = null;
+    	//delete all prev pointers (note: we go over treelist a constant number of times so ammort time fine)
+    	
+    	//now treelist is a simple linked list - we go over it and successive link
+    	
+    	HeapNode temp = node;
+    	HeapNode nexttemp;
+    	int tempRank;
+    	
+    	while (temp.next != null) {
 
+    		nexttemp = temp.next;
+    		temp.next = null; //disconnected from list completely
+    		//we go through all this trouble of disconnecting pointers to avoid unwanted pointer in trees after link
+    		tempRank = temp.rank;
+    		
+
+    		if (rankArray[tempRank] == null) rankArray[tempRank] = temp;  //"insert into vases"
+    		
+    		else {
+    			rankArray[tempRank + 1] = link(rankArray[tempRank], temp); //"link and move to next vase"
+    			rankArray[tempRank] = null; //"empty vase"
+    		}
+    		
+    		temp = nexttemp;
+    		
+		}
+    	
+    	//we now have an array of linked trees- turn back into linked list
+    	
+    	minNode = null; //flag for first insert (we have access to trees through array)
+    	
+    	for (HeapNode tree : rankArray) {
+			if(tree != null) { //there us a tree of this rank
+				
+				if (minNode == null) { //first insert
+					minNode = tree;
+					minNode.next = minNode;
+					minNode.prev = minNode;
+				}
+				else { //insert into non empty list
+		    		tree.next = minNode.next;
+		    		minNode.next.prev = tree; 
+		    		tree.prev = minNode;  
+		    		minNode.next = tree; 
+		    	}
+		    	
+		    	if (tree.key < minNode.key) minNode = tree; //update min
+			}
+		}
+    	
+	}
+    
    /**
     * public HeapNode findMin()
     *

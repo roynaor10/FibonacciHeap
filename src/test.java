@@ -11,7 +11,10 @@ public class test {
 		heap.meld(heap2);
 		
 		System.out.println(heap.findMin().key);
-		System.out.println(heap.potential());
+		System.out.println(heap.linetostring(heap.findMin()));
+		heap.deleteMin();
+		heap.deleteMin();
+		System.out.println(heap.linetostring(heap.findMin()));
 
 	}
 
