@@ -33,7 +33,24 @@ public class FibonacciHeap
     */
     public HeapNode insert(int key)
     {    
-    	return new HeapNode(key); // should be replaced by student code
+    	HeapNode newNode = new HeapNode(key); 
+    	// Default values: rank = 0, mark = False, child = null
+    	// next = null, prev = null, parent = null
+    	if (empty()) {
+    		minNode = newNode; 
+    		minNode.next = minNode; 
+    		minNode.prev = minNode; 
+    	}
+    	else { 
+    		newNode.next = minNode.next;
+    		minNode.next.prev = newNode; 
+    		newNode.prev = minNode;  
+    		minNode.next = newNode; 
+    	}
+    	if (newNode.key < minNode.key) {
+    		minNode = newNode; 
+    	}
+    	return newNode; 
     }
 
    /**
@@ -67,7 +84,33 @@ public class FibonacciHeap
     */
     public void meld (FibonacciHeap heap2)
     {
-    	  return; // should be replaced by student code   		
+    	
+    	size += heap2.size;
+    	treeNum += heap2.treeNum;
+    	markedNum += heap2.markedNum; //update fields
+    	
+    	
+    	if (heap2.minNode == null) return; //nothing to meld if heap empty
+    	else if (minNode == null) {
+    		minNode=heap2.minNode;
+    		return; //if this heap empty, it now looks the same as heap2 did initially
+    	}
+    	
+    	
+    	//if heap not empty these pointers exist
+    	HeapNode othermin = heap2.findMin();
+    	HeapNode currentListSecond = findMin().next;
+    	HeapNode otherListEnd = othermin.prev; //since the array is circular we determine first is min and his prev is last
+    	
+    	minNode.next = othermin;
+    	othermin.prev = minNode;
+    	
+    	otherListEnd.next = currentListSecond;
+    	currentListSecond.prev = otherListEnd; //put heap 2 inbetween min and min.next
+    	
+    	
+    	if(heap2.minNode.key<minNode.key) minNode = heap2.minNode; //update min
+    	
     }
 
    /**
