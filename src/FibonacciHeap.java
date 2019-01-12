@@ -91,6 +91,7 @@ public class FibonacciHeap {
     	
     	
     	if (minNode.child == null) { //skip concating and successive link immediately
+    		treeNum--;
     		successiveLink(minNext);
 			return;
 		}
@@ -351,12 +352,17 @@ public class FibonacciHeap {
     * to reflect this change (for example, the cascading cuts procedure should be applied if needed).
     */
     public void decreaseKey(HeapNode x, int delta) { 
-    	if ((x == null) || (delta < 0) || (x.key - delta < 0)) return;
-    	x.key -= delta; 
-    	if (x == minNode) return; 
-    	if ((x.parent != null) && (x.rank < x.parent.key)) {
+    	
+    	if ((x == null) || (delta < 0) || (x.key - delta < 0)) return; //check non negatie heap invariant
+    	
+    	x.key -= delta; //decrease key by delta
+    	
+    	if (x == minNode) return; //if min than no conflict with parent
+    	
+    	if ((x.parent != null) && (x.key < x.parent.key)) {
     		cascadingCut(x, x.parent); 
     	}
+    	
     	if (x.key < minNode.key) minNode = x;  
     }
     
@@ -372,14 +378,19 @@ public class FibonacciHeap {
     } */
     
     private void cut(HeapNode x, HeapNode y) {
+    	
     	totalCuts++; 
     	treeNum++; // Every cut adds a new tree
+    	
     	x.parent = null; 
-    	x.marked = false; 
-    	--y.rank; 
-    	if (x.next == x) {
+    	x.marked = false; //x now root- becomes unmarked
+    	markedNum--;
+    	
+    	--y.rank; //y lost one child
+    	if (x.next == x) { //y has no children
     		y.child = null; 
     	}
+    	
     	else {
     		y.child = x.next; 
     		x.prev.next = x.next; 
@@ -388,14 +399,26 @@ public class FibonacciHeap {
     }
     
     private void cascadingCut(HeapNode x, HeapNode y) {
-    	cut(x, y); 
+    	
+    	cut(x, y);
+    	
+    	//insert between minnode and minnode.next
+		x.next = minNode.next;
+		minNode.next.prev = x; 
+		x.prev = minNode;  
+		minNode.next = x; 
+    	
     	if (y.parent != null) {
-    		if (!y.marked) { // y.marked == false - y has yet lost one of its sons 
+    		
+    		if (!y.marked) { // y.marked == false - y has yet to lose one of its sons 
     			y.marked = true; // mark y as having lost one of its sons 
+    			markedNum++;
     		}
+    		
     		else {
     			cascadingCut(y, y.parent); 
     		}
+    		
     	}
     }
     

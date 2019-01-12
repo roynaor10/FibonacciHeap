@@ -15,9 +15,11 @@ public class test {
 		
 		System.out.println(heap.findMin().key);
 		System.out.println(heap.linetostring(heap.findMin()));
+		System.out.println(heap.potential());
 		heap.deleteMin();
 		System.out.println(heap.linetostring(heap.findMin()));
 		System.out.println(heap.potential());
+		System.out.println(heap.size());
 
 	}
 
