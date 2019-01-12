@@ -162,10 +162,10 @@ public class FibonacciHeap {
     	if ((x.parent != null) && (x.rank < x.parent.key)) {
     		cascadingCut(x, x.parent); 
     	}
-    	findNewMin(); 
+    	if (x.key < minNode.key) minNode = x;  
     }
     
-	private void findNewMin() {
+	/* private void findNewMin() { // Don't delete this function yet, maybe we'll need it later 
     	HeapNode temp = minNode.next; 
     	while (temp != minNode) {
     		if (temp.key < minNode.key) {
@@ -174,7 +174,7 @@ public class FibonacciHeap {
     		}
     		temp = temp.next; 
     	}
-    }
+    } */
     
     private void cut(HeapNode x, HeapNode y) {
     	x.parent = null; 
@@ -250,7 +250,7 @@ public class FibonacciHeap {
 	private int rank;
 	private boolean marked;
 	private HeapNode child;
-	private HeapNode next; 
+	public HeapNode next; // TODO: switch back to private 
 	private HeapNode prev;
 	private HeapNode parent;
 
