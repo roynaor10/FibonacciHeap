@@ -209,7 +209,7 @@ public class FibonacciHeap {
 
     		if (rankArray[insertplace] == null) {
     			rankArray[insertplace] = temp;  //"insert into vases" , no more links
-    			System.out.println("inserted "+temp.key);
+    			System.out.println("inserted "+temp.key);//TODO delete
     		}
     		
     		else {
@@ -380,14 +380,17 @@ public class FibonacciHeap {
     	}
     } */
     
+    //TODO add explanation
     private void cut(HeapNode x, HeapNode y) {
+    	
+    	System.out.println("cut "+x.key+" from "+y.key); //TODO delete
     	
     	totalCuts++; 
     	treeNum++; // Every cut adds a new tree
     	
     	x.parent = null; 
+    	if (x.marked) markedNum--;
     	x.marked = false; //x now root- becomes unmarked
-    	markedNum--;
     	
     	--y.rank; //y lost one child
     	if (x.next == x) { //y has no children
@@ -425,7 +428,6 @@ public class FibonacciHeap {
     	}
     }
     
-
    /**
     * public int potential() 
     *
