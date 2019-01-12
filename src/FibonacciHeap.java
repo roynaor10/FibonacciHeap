@@ -136,7 +136,24 @@ public class FibonacciHeap {
     * 
     */
     public int[] countersRep() {
-    	return null;
+    	if (empty()) return new int[] {}; 
+    	int[] countersRep = new int[maxRank() + 1]; 
+    	HeapNode temp = minNode; 
+    	do {
+    		countersRep[temp.rank]++; 
+    		temp = temp.next; 
+    	} while (temp != minNode); 
+    	return countersRep; 
+    }
+    
+    private int maxRank() {
+    	int maxRank = 0; 
+    	HeapNode temp = minNode; 
+    	do {
+    		maxRank = Math.max(maxRank, temp.rank); 
+    		temp = temp.next; 
+    	} while (temp != minNode); 
+    	return maxRank; 
     }
 	
    /**
@@ -165,7 +182,7 @@ public class FibonacciHeap {
     	if (x.key < minNode.key) minNode = x;  
     }
     
-	/* private void findNewMin() { // Don't delete this function yet, maybe we'll need it later 
+	/* private void findNewMin() {
     	HeapNode temp = minNode.next; 
     	while (temp != minNode) {
     		if (temp.key < minNode.key) {
@@ -250,7 +267,7 @@ public class FibonacciHeap {
 	private int rank;
 	private boolean marked;
 	private HeapNode child;
-	public HeapNode next; // TODO: switch back to private 
+	public HeapNode next; 
 	private HeapNode prev;
 	private HeapNode parent;
 
