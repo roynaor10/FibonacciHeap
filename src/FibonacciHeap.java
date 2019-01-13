@@ -449,7 +449,7 @@ public class FibonacciHeap {
     	}
     }
     
-   /**
+    /**
     * public int potential() 
     *
     * This function returns the current potential of the heap, which is:
@@ -476,7 +476,7 @@ public class FibonacciHeap {
     * public static int totalCuts() 
     *
     * This static function returns the total number of cut operations made during the run-time of the program.
-    * A cut operation is the operation which diconnects a subtree from its parent (during decreaseKey/delete methods). 
+    * A cut operation is the operation which disconnects a subtree from its parent (during decreaseKey/delete methods). 
     */
     public static int totalCuts() {    
     	return totalCuts;
