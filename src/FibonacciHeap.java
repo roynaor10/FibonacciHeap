@@ -400,6 +400,9 @@ public class FibonacciHeap {
     }
     
 
+    /**
+     * cuts x from its parent y
+     */
     
     //TODO add explanation
     private void cut(HeapNode x, HeapNode y) {
@@ -448,6 +451,7 @@ public class FibonacciHeap {
     		
     	}
     }
+    
     
     /**
     * public int potential() 
