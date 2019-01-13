@@ -372,7 +372,7 @@ public class FibonacciHeap {
     		cascadingCut(x, x.parent); 
     	}
     	if(x != minNode) minNode = x; //x now root with min value, determine min (doesnt matter if there are other 0's)    	
-    	System.out.println(linetostring(minNode));
+    	
     	deleteMin(); //delete x from tree
     	
     	//note that changing x<x.parent -> cut to x<=x.parent -> cut does not affect the heap invariants and maintains ammort time
