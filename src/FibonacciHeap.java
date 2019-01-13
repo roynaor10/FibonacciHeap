@@ -402,9 +402,8 @@ public class FibonacciHeap {
 
     /**
      * cuts x from its parent y
+     * unmarkes y
      */
-    
-    //TODO add explanation
     private void cut(HeapNode x, HeapNode y) {
     	
     	System.out.println("cut "+x.key+" from "+y.key); //TODO delete
@@ -428,6 +427,10 @@ public class FibonacciHeap {
     	}
     }
     
+    /**
+     * cut x from y,and mark y
+     *  if y was marked go up and cut him from his parent until reaching unmarked node or root
+     */
     private void cascadingCut(HeapNode x, HeapNode y) {
     	
     	cut(x, y);
