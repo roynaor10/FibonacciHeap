@@ -345,7 +345,17 @@ public class FibonacciHeap {
     *
     */
     public void delete(HeapNode x) {    
-    	return; // should be replaced by student code
+    	
+    	decreaseKey(x, x.key); //now x is now with key 0, minimum possible, but could still be a child of 0
+    	
+    	if ((x.parent != null)) { //only if child of 0
+    		cascadingCut(x, x.parent); 
+    	}
+    	if(x != minNode) minNode = x; //x now root with min value, determine min (doesnt matter if there are other 0's)    	
+    	System.out.println(linetostring(minNode));
+    	deleteMin(); //delete x from tree
+    	
+    	//note that changing x<x.parent -> cut to x<=x.parent -> cut does not affect the heap invariants and maintains ammort time
     }
 
    /**
@@ -356,7 +366,7 @@ public class FibonacciHeap {
     */
     public void decreaseKey(HeapNode x, int delta) { 
     	
-    	if ((x == null) || (delta < 0) || (x.key - delta < 0)) return; //check non negatie heap invariant
+    	if ((x == null) || (delta < 0) || (x.key - delta < 0)) return; //check non negative heap invariant
     	
     	x.key -= delta; //decrease key by delta
     	

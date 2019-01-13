@@ -9,9 +9,9 @@ public class test {
 	    heap.insert(3);
 		FibonacciHeap.HeapNode b= heap.insert(7);
 		heap.insert(9);
-		heap.insert(1);
+		heap.insert(0);
 		FibonacciHeap heap2=new FibonacciHeap();
-		heap2.insert(2);
+		heap2.insert(0);
 		FibonacciHeap.HeapNode a= heap2.insert(4);
 		FibonacciHeap.HeapNode c= heap2.insert(6);
 		heap2.insert(99);
@@ -27,8 +27,9 @@ public class test {
 		//System.out.println(heap.potential());
 		///System.out.println(heap.size());
 		
-		heap.decreaseKey(b, 6);
-		heap.decreaseKey(c, 5);
+		//heap.decreaseKey(b, 6);
+		//heap.decreaseKey(c, 5);
+		heap.delete(a);
 		
 		System.out.println(heap.linetostring(heap.findMin()));
 		System.out.println(heap.potential());
