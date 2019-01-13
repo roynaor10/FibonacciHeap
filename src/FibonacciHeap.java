@@ -399,7 +399,6 @@ public class FibonacciHeap {
     	if (x.key < minNode.key) minNode = x;  
     }
     
-
     /**
      * cuts x from its parent y
      * unmarkes y
@@ -454,7 +453,6 @@ public class FibonacciHeap {
     		
     	}
     }
-    
     
     /**
     * public int potential() 
