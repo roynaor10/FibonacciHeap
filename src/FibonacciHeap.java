@@ -28,6 +28,7 @@ public class FibonacciHeap {
     * public HeapNode insert(int key)
     *
     * Creates a node (of type HeapNode) which contains the given key, and inserts it into the heap. 
+    * returns the node for future access.
     */
 
     public HeapNode insert(int key)
@@ -60,6 +61,10 @@ public class FibonacciHeap {
     	return newNode; 
     }
 
+    /**
+     * returns a string representing the list of keys in the current row,
+     * starting at the specified node. (uses primarily for testing).
+     */
     public String linetostring(HeapNode node) {
     	String string = node.key+" ";
     	for (HeapNode temp=node.next; temp!=node; temp=temp.next) string+= temp.key+" ";
@@ -90,7 +95,7 @@ public class FibonacciHeap {
     	minNode.prev = null; //delete min node from tree list (bypass it)
     	
     	
-    	if (minNode.child == null) { //skip concating and successive link immediately
+    	if (minNode.child == null) { //skip concatenating and successive link immediately
     		treeNum--;
     		successiveLink(minNext);
 			return;
@@ -133,7 +138,6 @@ public class FibonacciHeap {
     	
     	successiveLink(minNode);
     	
-    	
     }
     
     /**
@@ -143,7 +147,7 @@ public class FibonacciHeap {
      */
     private HeapNode link(HeapNode x,HeapNode y) {
     	
-    	treeNum--;
+    	treeNum--; //two trees -> one tree
     	totalLinks++;
     	
     	if (x.key > y.key) { //if x not smaller than y switch
@@ -177,14 +181,15 @@ public class FibonacciHeap {
     }
     
     /**
-     * receives a heap and performs successive linking on it (adds tree by ranks as shown in class)
+     * receives a heap and performs successive linking on it (adds tree by ranks as shown in class),
+     * such that the returned heap has at most one tree of each rank.
      * @param node pointer to heap (some root)
      * @return node pointer to new linked heap (new root)- root returned is new min node
      */
     private void successiveLink(HeapNode node) {
 		
     	int maxRank = (int)(5*Math.log10(size)) + 2; //max rank <= 1.44log2(n) <= 5log10(n) (according to lecture)
-    	HeapNode[] rankArray = new HeapNode[maxRank];
+    	HeapNode[] rankArray = new HeapNode[maxRank]; //"create vases" (note: O(logn))
     	
     	node.prev.next = null; 
     	node.prev = null; //now list not circular
@@ -198,13 +203,16 @@ public class FibonacciHeap {
     	HeapNode currentLinkedTree;
     	int insertplace;
     	
+    	//we disconnect node from simple linked list (no stray pointer trouble) and than insert into first vase, link further...
+    	
     	while (temp != null) {
 
-    		currentLinkedTree = temp;
+    		currentLinkedTree = temp; //used to keep linked tree until no more links -> then insert
     		nexttemp = temp.next;
     		temp.next = null; //disconnected from list completely
     		//we go through all this trouble of disconnecting pointers to avoid unwanted pointer in trees after link
-    		insertplace = temp.rank;
+    		
+    		insertplace = temp.rank; //initial insert place by rank
     		
 
     		if (rankArray[insertplace] == null) {
@@ -214,16 +222,16 @@ public class FibonacciHeap {
     		
     		else {
     			while (rankArray[insertplace] != null) { //keep linking trees until no more pairs to link
-					currentLinkedTree = link(rankArray[insertplace], currentLinkedTree); //"link and move to next vase"
-	    			rankArray[insertplace] = null; //"empty vase"
-	    			insertplace++;
-				}
+    				currentLinkedTree = link(rankArray[insertplace], currentLinkedTree); //"link and move to next vase"
+    				rankArray[insertplace] = null; //"empty vase"
+    				insertplace++;
+    			}
     			//we linked until we found a free vase
     			rankArray[insertplace] = currentLinkedTree;
 
     		}
     		
-    		temp = nexttemp;
+    		temp = nexttemp; //go to next node in simple linked list
     		
 		}
     	
@@ -247,7 +255,7 @@ public class FibonacciHeap {
 		    	}
 		    	
 		    	if (tree.key < minNode.key) minNode = tree; //update min
-			}
+			} //note: this is also O(logn) (array length)
 		}
     	
 	}
@@ -318,23 +326,34 @@ public class FibonacciHeap {
     * 
     */
     public int[] countersRep() {
+    	
     	if (empty()) return new int[] {}; 
-    	int[] countersRep = new int[maxRank() + 1]; 
+
+    	int[] countersRep = new int[maxRank() + 1]; //array to insert into
     	HeapNode temp = minNode; 
+
     	do {
     		countersRep[temp.rank]++; 
     		temp = temp.next; 
-    	} while (temp != minNode); 
+    	} while (temp != minNode);  //go over list and update cunters by rank
+
     	return countersRep; 
     }
     
-    private int maxRank() {        
+    /**
+     * goes over the tree and returns maximum rank of a tree in the heap.
+     * note: this is only used for countersRep.
+     */
+    private int maxRank() {       
+    	
     	int maxRank = 0; 
     	HeapNode temp = minNode; 
+    	
     	do {
     		maxRank = Math.max(maxRank, temp.rank); 
     		temp = temp.next; 
     	} while (temp != minNode); 
+    	
     	return maxRank; 
     }
 	
@@ -343,6 +362,7 @@ public class FibonacciHeap {
     *
     * Deletes the node x from the heap. 
     *
+    * implementation: decreases key to minimum (0) and deletes min.
     */
     public void delete(HeapNode x) {    
     	
@@ -379,16 +399,7 @@ public class FibonacciHeap {
     	if (x.key < minNode.key) minNode = x;  
     }
     
-	/* private void findNewMin() {
-    	HeapNode temp = minNode.next; 
-    	while (temp != minNode) {
-    		if (temp.key < minNode.key) {
-    			minNode = temp;
-    			return; 
-    		}
-    		temp = temp.next; 
-    	}
-    } */
+
     
     //TODO add explanation
     private void cut(HeapNode x, HeapNode y) {
