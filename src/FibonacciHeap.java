@@ -30,7 +30,6 @@ public class FibonacciHeap {
     * Creates a node (of type HeapNode) which contains the given key, and inserts it into the heap. 
     * returns the node for future access.
     */
-
     public HeapNode insert(int key)
     {    
     	
@@ -175,7 +174,6 @@ public class FibonacciHeap {
     	
     	x.rank++; //added one child
     	
-    	System.out.println("linked " +x.key+ " to "+y.key); //TODO delete
     	return x; //return new root
     	
     }
@@ -213,11 +211,9 @@ public class FibonacciHeap {
     		//we go through all this trouble of disconnecting pointers to avoid unwanted pointer in trees after link
     		
     		insertplace = temp.rank; //initial insert place by rank
-    		
 
     		if (rankArray[insertplace] == null) {
     			rankArray[insertplace] = temp;  //"insert into vases" , no more links
-    			System.out.println("inserted "+temp.key);//TODO delete
     		}
     		
     		else {
@@ -230,7 +226,6 @@ public class FibonacciHeap {
     			rankArray[insertplace] = currentLinkedTree;
 
     		}
-    		
     		temp = nexttemp; //go to next node in simple linked list
     		
 		}
@@ -276,7 +271,6 @@ public class FibonacciHeap {
     * Meld the heap with heap2
     *
     */
-
     public void meld(FibonacciHeap heap2)
     {
     	
@@ -405,7 +399,6 @@ public class FibonacciHeap {
      */
     private void cut(HeapNode x, HeapNode y) {
     	
-    	System.out.println("cut "+x.key+" from "+y.key); //TODO delete
     	
     	totalCuts++; 
     	treeNum++; // Every cut adds a new tree

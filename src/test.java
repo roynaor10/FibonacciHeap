@@ -36,6 +36,12 @@ public class test {
 		System.out.println(Arrays.toString(heap.countersRep()));
 		System.out.println(heap.size());
 
+		FibonacciHeap fibonacciHeap=new FibonacciHeap();
+		for (int i = 100; i > 0; i--) fibonacciHeap.insert(i);
+		System.out.println(fibonacciHeap.linetostring(fibonacciHeap.findMin()));
+		fibonacciHeap.deleteMin();
+		System.out.println(fibonacciHeap.linetostring(fibonacciHeap.findMin()));
+		System.out.println(fibonacciHeap.totalLinks());
 	}
 
 }
